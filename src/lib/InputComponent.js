@@ -20,7 +20,6 @@ export class InputComponent extends React.Component{
       minFieldHeight: props.height || 44,
       inputHeight: Math.max(props.height || 44)
     }
-        console.log("initial value!", props.initialValue);
     if(props.validationFunction) {
       this.valid = props.validationFunction(value, this);
     } else{
