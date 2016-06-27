@@ -16,10 +16,11 @@ export class InputComponent extends React.Component{
     super();
     this.state = {
       labelWidth: 0,
-      value: props.value,
+      text: props.initialValue,
       minFieldHeight: props.height || 44,
       inputHeight: Math.max(props.height || 44)
     }
+        console.log("initial value!", props.initialValue);
     if(props.validationFunction) {
       this.valid = props.validationFunction(value, this);
     } else{
@@ -60,11 +61,11 @@ export class InputComponent extends React.Component{
           break;
       }
     }
-    this.setState({value:value,
+    this.setState({
+      text: this.props.overrideValue ? this.props.overrideValue(value) : value,
       inputHeight: Math.max(this.state.minFieldHeight,
         (event.nativeEvent.contentSize && this.props.multiline)?event.nativeEvent.contentSize.height:0)
       });
-    //this.props.onChange(this.props.fieldRef, value);
     if(this.props.onChange)      this.props.onChange(this.props.fieldRef, value);
     if(this.props.onValueChange) this.props.onValueChange(value);
   }
@@ -109,6 +110,7 @@ export class InputComponent extends React.Component{
             : null
           }
           <TextInput
+            value = {this.state.text}
             {...this.props}
             ref='inputBox'
             keyboardType = {this.props.keyboardType}
@@ -116,11 +118,9 @@ export class InputComponent extends React.Component{
                 this.props.inputStyle,
                 {height: this.state.inputHeight}
               ]}
-
             onChange={this.handleChange.bind(this)}
             onFocus={this._scrollToInput.bind(this)}
             placeholder={this.props.placeholder}
-            value={this.state.value}
             width={this.state.width-this.state.labelWidth
                 -((this.props.iconRight)?this.props.iconRight.props.size:0)
                 -((this.props.iconLeft)?this.props.iconLeft.props.size:0)
